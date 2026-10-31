@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wedding Invitation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="is-locked">
+
+<!-- Decorative lavender sprig, reused in several places. Nothing to edit here. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="sprig" viewBox="0 0 40 120" fill="currentColor">
+    <path d="M20 118C20 80 20 40 20 8" stroke="currentColor" stroke-width="1.4" fill="none"/>
+    <ellipse cx="13" cy="24" rx="4.5" ry="9" transform="rotate(-24 13 24)"/><ellipse cx="27" cy="24" rx="4.5" ry="9" transform="rotate(24 27 24)"/>
+    <ellipse cx="12" cy="44" rx="4.5" ry="9" transform="rotate(-28 12 44)"/><ellipse cx="28" cy="44" rx="4.5" ry="9" transform="rotate(28 28 44)"/>
+    <ellipse cx="12" cy="64" rx="4.5" ry="9" transform="rotate(-30 12 64)"/><ellipse cx="28" cy="64" rx="4.5" ry="9" transform="rotate(30 28 64)"/>
+    <ellipse cx="20" cy="9" rx="4" ry="8"/>
+  </symbol>
+</svg>
+
+<div class="petals" id="petals" aria-hidden="true"></div>
+
+<!-- ============ OPENING SCREEN ============ -->
+<section class="intro" id="intro" aria-label="Invitation cover">
+  <!--
+  IMAGE CUSTOMIZATION:
+  Replace this file: assets/images/wedding-couple.png (transparent PNG, keep the same filename).
+  The path is set in script.js > weddingConfig.images.coupleIllustration
+  -->
+  <img class="intro__couple" data-image="coupleIllustration" alt="Illustration of the bride and groom walking toward each other" width="612" height="408">
+  <p class="eyebrow">Together with their families</p>
+  <h1 class="script intro__names"><span data-text="brideName"></span> <i>&amp;</i> <span data-text="groomName"></span></h1>
+  <button class="btn" id="openBtn" type="button">Open invitation</button>
+</section>
+
+<nav class="nav" aria-label="Sections">
+  <a href="#date">Date</a><a href="#couple">Couple</a><a href="#details">Details</a><a href="#venue">Venue</a>
+</nav>
+
+<main>
+<!-- ============ DATE (scratch to reveal) ============ -->
+<header class="hero section" id="date">
+  <div class="hero__bg" aria-hidden="true"></div>
+  <svg class="sprig sprig--l" aria-hidden="true"><use href="#sprig"/></svg>
+  <svg class="sprig sprig--r" aria-hidden="true"><use href="#sprig"/></svg>
+  <p class="eyebrow reveal">Save the date</p>
+  <p class="hero__msg reveal" data-text="invitationMessage"></p>
+  <div class="scratch reveal" id="scratch">
+    <div class="scratch__date">
+      <span data-text="weekday"></span>
+      <strong data-text="dayNumber"></strong>
+      <span data-text="monthYear"></span>
+    </div>
+    <canvas id="scratchCanvas" aria-hidden="true"></canvas>
+  </div>
+  <button class="btn btn--ghost reveal" id="revealBtn" type="button">Reveal the date</button>
+</header>
+
+<!-- ============ COUPLE ============ -->
+<section class="section" id="couple">
+  <h2 class="script reveal">The couple</h2>
+  <div class="grid grid--2">
+    <article class="card profile reveal">
+      <!-- IMAGE CUSTOMIZATION: replace assets/images/bride-photo.jpg (4:5 portrait, JPG/WebP) -->
+      <img data-image="bridePhoto" alt="Portrait of the bride" width="640" height="800" loading="lazy">
+      <h3 data-text="brideName"></h3>
+      <p data-text="brideDescription"></p>
+    </article>
+    <article class="card profile reveal">
+      <!-- IMAGE CUSTOMIZATION: replace assets/images/groom-photo.jpg (4:5 portrait, JPG/WebP) -->
+      <img data-image="groomPhoto" alt="Portrait of the groom" width="640" height="800" loading="lazy">
+      <h3 data-text="groomName"></h3>
+      <p data-text="groomDescription"></p>
+    </article>
+  </div>
+</section>
+
+<!-- ============ DETAILS ============ -->
+<section class="section" id="details">
+  <h2 class="script reveal">Wedding details</h2>
+  <div class="grid grid--3">
+    <div class="card detail reveal"><h3>Date</h3><p data-text="dateLong"></p></div>
+    <div class="card detail reveal"><h3>Ceremony</h3><p data-text="ceremonyTime"></p></div>
+    <div class="card detail reveal"><h3>Reception</h3><p data-text="receptionTime"></p></div>
+  </div>
+  <h3 class="count-title reveal">Counting down to our day</h3>
+  <div class="countdown reveal" id="countdown" role="timer" aria-live="off">
+    <div><b id="cdDays">0</b><span>Days</span></div>
+    <div><b id="cdHours">0</b><span>Hours</span></div>
+    <div><b id="cdMins">0</b><span>Minutes</span></div>
+    <div><b id="cdSecs">0</b><span>Seconds</span></div>
+  </div>
+  <p class="count-done" id="cdDone" hidden>Today is the day. We are so happy you are here.</p>
+</section>
+
+<!-- ============ VENUE ============ -->
+<section class="section" id="venue">
+  <h2 class="script reveal">The venue</h2>
+  <!-- IMAGE CUSTOMIZATION: replace assets/images/venue.jpg (3:2 landscape, JPG/WebP) -->
+  <img class="venue__photo reveal" data-image="venuePhoto" alt="The wedding venue" width="1200" height="800" loading="lazy">
+  <div class="card venue reveal">
+    <h3 data-text="venueName"></h3>
+    <p data-text="venueAddress"></p>
+    <!-- The map is filled in by script.js from weddingConfig.googleMapsEmbedUrl -->
+    <div class="map" id="mapBox"><p class="map__ph">The map will appear here once a Google Maps embed link is added.</p></div>
+    <a class="btn" id="directionsBtn" target="_blank" rel="noopener">Get directions</a>
+  </div>
+</section>
+
+<!-- ============ THANK YOU ============ -->
+<section class="section thanks" id="thanks">
+  <svg class="sprig sprig--l" aria-hidden="true"><use href="#sprig"/></svg>
+  <svg class="sprig sprig--r" aria-hidden="true"><use href="#sprig"/></svg>
+  <!-- IMAGE CUSTOMIZATION: same file as the opening screen, assets/images/wedding-couple.png -->
+  <img class="thanks__couple reveal" data-image="coupleIllustration" alt="Illustration of the bride and groom" width="612" height="408" loading="lazy">
+  <h2 class="script reveal">Thank you</h2>
+  <p class="reveal" data-text="thankYouMessage"></p>
+  <p class="script thanks__names reveal"><span data-text="brideName"></span> &amp; <span data-text="groomName"></span></p>
+</section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
